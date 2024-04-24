@@ -46,7 +46,8 @@ int main()
     }
 
     auto start_par = std::chrono::steady_clock::now();
-    auto char_count_par = parallel::accumulate(std::execution::par_unseq, std::execution::par_unseq, chars.begin(), chars.end(), 
+    auto char_count_par = parallel::accumulate(std::execution::par_unseq, std::execution::par_unseq,
+                                     chars.begin(), chars.end(), 
                                      [](){ return std::unordered_map<char, size_t>{}; }, //initF
                                      [](auto& char_count, auto c) { ++char_count[c]; }, //accumulateF
                                      [](auto const& lhs, auto const& rhs) { //reduceF
