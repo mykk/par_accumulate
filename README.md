@@ -67,7 +67,8 @@ int main()
 ```
 Possible output:
 
-```g++ -O3 -std=c++17 -Wall -Wextra -pedantic par_accumulate.cpp -ltbb
+```
+g++ -O3 -std=c++17 -Wall -Wextra -pedantic par_accumulate.cpp -ltbb
 ./a.out
 
 seq duration:328.791
