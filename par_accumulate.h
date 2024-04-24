@@ -10,6 +10,9 @@ namespace parallel {
         auto const thread_count = std::thread::hardware_concurrency();
 
         auto const result_count = thread_count < size ? thread_count : size;
+        if (result_count == 0)
+            return initF();
+
         auto const chunk_size = size / result_count;
 
         auto results = std::vector<decltype(initF())>(result_count);
