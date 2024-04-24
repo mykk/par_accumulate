@@ -1,5 +1,18 @@
 # par_accumulate
-Simple templated parallel accumulate function
+Simple templated parallel accumulate function. 
+
+```
+template <class AccumulateExecutionPolicy, class ReduceExecutionPolicy, class InputIt, class InitF, class AccumulateF, class ReduceF>
+[[nodiscard]] auto accumulate(AccumulateExecutionPolicy&& policyAccumulate, ReduceExecutionPolicy&& policyReduce, InputIt first, InputIt last, InitF initF, AccumulateF accumulateF, ReduceF reduceF) -> decltype(initF())
+```
+
+## Parameters
+* policyAccumulate - the execution policy to use for accumulate function.
+* policyReduce - the execution policy to use for reduce function.
+* first, last - the range of elements to apply the algorithm to.
+* initF - binary FunctionObject to return initial value.
+* accumulateF - binary FunctionObject that will be applied in unspecified order to the result of dereferencing the input iterators, the results of other op and initF()
+* reduceF - binary FunctionObject to join the results of accumulateF in unspecified order
 
 Example usage
 ```
@@ -34,9 +47,9 @@ int main()
 
     auto start_par = std::chrono::steady_clock::now();
     auto char_count_par = parallel::accumulate(std::execution::par_unseq, std::execution::par_unseq, chars.begin(), chars.end(), 
-                                     [](){ return std::unordered_map<char, size_t>{}; },
-                                     [](auto& char_count, auto c) { ++char_count[c]; },
-                                     [](auto const& lhs, auto const& rhs) {
+                                     [](){ return std::unordered_map<char, size_t>{}; }, //initF
+                                     [](auto& char_count, auto c) { ++char_count[c]; }, //accumulateF
+                                     [](auto const& lhs, auto const& rhs) { //reduceF
                                         std::unordered_map<char, size_t> char_count{};
                                         for (auto const& val: lhs)
                                             char_count[val.first] = val.second;
