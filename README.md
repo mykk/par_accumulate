@@ -50,14 +50,10 @@ int main()
                                      chars.begin(), chars.end(), 
                                      [](){ return std::unordered_map<char, size_t>{}; }, //initF
                                      [](auto& char_count, auto c) { ++char_count[c]; }, //accumulateF
-                                     [](auto const& lhs, auto const& rhs) { //reduceF
-                                        std::unordered_map<char, size_t> char_count{};
-                                        for (auto const& val: lhs)
-                                            char_count[val.first] = val.second;
+                                     [](auto&& lhs, auto const& rhs) {
                                         for (auto const& val: rhs)
-                                            char_count[val.first] += val.second;
-
-                                        return char_count;
+                                            lhs[val.first] += val.second;
+                                        return lhs;
                                      });
     auto end_par = std::chrono::steady_clock::now();
 
