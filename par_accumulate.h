@@ -6,7 +6,7 @@
 namespace parallel {
     template <class AccumulateExecutionPolicy, class ReduceExecutionPolicy, class InputIt, class InitF, class AccumulateF, class ReduceF>
     [[nodiscard]] auto accumulate(AccumulateExecutionPolicy&& policyAccumulate, ReduceExecutionPolicy&& policyReduce, InputIt first, InputIt last, InitF initF, AccumulateF accumulateF, ReduceF reduceF) -> decltype(initF()) {
-        auto const size = last - first;
+        auto const size = std::distance(first, last);
         auto const thread_count = std::thread::hardware_concurrency();
 
         auto const result_count = thread_count < size ? thread_count : size;
